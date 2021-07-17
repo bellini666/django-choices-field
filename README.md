@@ -26,7 +26,7 @@ class MyModel(models.Model):
         FOO = "foo", "Foo Description"
         BAR = "bar", "Bar Description"
 
-    class IntegerEnum(models.TextChoices):
+    class IntegerEnum(models.IntegerChoices):
         FIRST = 1, "First Description"
         SECOND = 2, "Second Description"
 
