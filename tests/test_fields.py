@@ -44,7 +44,7 @@ def test_set_none(db):
 def test_set_wrong_value(db):
     m = MyModel()
     with pytest.raises(ValidationError) as exc:
-        m.c_field = 1
+        m.c_field = 1  # type:ignore (we really want the error here)
         m.save()
 
     assert list(exc.value) == ["“1” must be a subclass of <enum 'MyEnum'>."]

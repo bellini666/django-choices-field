@@ -1,3 +1,5 @@
+from typing import Optional, Type
+
 from django.core.exceptions import ValidationError
 from django.db import models
 
@@ -8,7 +10,13 @@ class ChoicesField(models.CharField):
         "invalid": "“%(value)s” must be a subclass of %(enum)s.",
     }
 
-    def __init__(self, verbose_name=None, name=None, choices_enum=None, **kwargs):
+    def __init__(
+        self,
+        choices_enum: Type[models.TextChoices],
+        verbose_name: Optional[str] = None,
+        name: Optional[str] = None,
+        **kwargs,
+    ):
         self.choices_enum = choices_enum
         kwargs["choices"] = choices_enum.choices
         kwargs.setdefault("max_length", max(len(c.value) for c in choices_enum))
@@ -20,7 +28,6 @@ class ChoicesField(models.CharField):
         return name, path, args, kwargs
 
     def to_python(self, value):
-        print(1, value, type(value))
         if value is None:
             return None
 

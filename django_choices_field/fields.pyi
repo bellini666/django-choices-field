@@ -4,6 +4,7 @@ from typing import (
     Dict,
     Generic,
     Iterable,
+    Literal,
     Optional,
     Tuple,
     Type,
@@ -78,7 +79,7 @@ class ChoicesField(Generic[_C], Field[_C, _C]):
     def __get__(self: ChoicesField[_C], instance: Any, owner: Any) -> _C: ...
     @overload
     def __get__(self: ChoicesField[Optional[_C]], instance: Any, owner: Any) -> Optional[_C]: ...
-    @overload
-    def __set__(self, instance: ChoicesField[_C], value: _C) -> None: ...
-    @overload
-    def __set__(self, instance: ChoicesField[Optional[_C]], value: Optional[_C]) -> None: ...
+    # @overload
+    # def __set__(self, instance: ChoicesField[_C], value: _C) -> None: ...
+    # @overload
+    # def __set__(self, instance: ChoicesField[Optional[_C]], value: Optional[_C]) -> None: ...
