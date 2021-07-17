@@ -1,0 +1,94 @@
+[tool.poetry]
+name = "django-choices-field"
+version = "0.1"
+description = "Django field that set/get django's new TextChoices enum."
+authors = ["Thiago Bellini Ribeiro <thiago@bellini.dev>"]
+license = "MIT"
+readme = "README.md"
+homepage = "https://github.com/bellini666/django-choices-field"
+repository = "https://github.com/bellini666/django-choices-field"
+documentation = "https://django-choices-field.readthedocs.io"
+keywords = ["django", "enum"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Environment :: Web Environment",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Framework :: Django",
+    "Framework :: Django :: 3.0",
+    "Framework :: Django :: 3.1",
+    "Framework :: Django :: 3.2",
+]
+packages = [{include = "django_choices_field"}]
+
+[tool.poetry.dependencies]
+python = "^3.7"
+
+[tool.poetry.dev-dependencies]
+black = "^21.6b"
+codecov = "^2.1.11"
+django = "^3.2.5"
+django-types = "^0.7.0"
+flake8 = "^3.9.1"
+flake8-broken-line = "^0.3.0"
+flake8-bugbear = "^21.4.3"
+flake8-builtins = "^1.5.3"
+flake8-comprehensions = "^3.5.0"
+flake8-polyfill = "^1.0.2"
+flake8-return = "^1.1.3"
+flake8-simplify = "^0.14.1"
+mock = "^4.0.3"
+pynvim = "^0.4.3"
+pytest = "^6.2.3"
+pytest-cov = "^2.11.1"
+pytest-django = "^4.2.0"
+sphinx = {version = "^3", optional = true}
+sphinx-rtd-theme = {version = "^0.5.2", optional = true}
+isort = "^5.9.2"
+
+[tool.poetry.extras]
+docs = ["sphinx", "sphinx-rtd-theme"]
+
+[tool.black]
+line-length = 100
+target-version = ['py37', 'py38', 'py39']
+exclude = '''
+/(
+    \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | __pycached__
+  | _build
+  | buck-out
+  | build
+  | dist
+)/
+'''
+
+[tool.isort]
+profile = "black"
+multi_line_output = 3
+force_sort_within_sections = true
+
+[tool.pyright]
+pythonVersion = "3.7"
+useLibraryCodeForTypes = true
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "tests.settings"
+python_files = "tests/test_*.py"
+django_find_projects = false
+addopts = "--cov=./ -vv"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
