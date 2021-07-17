@@ -1,5 +1,6 @@
-from .fields import ChoicesField  # noqa
+from .fields import IntegerChoicesField, TextChoicesField  # noqa
 
 __all__ = [
-    "ChoicesField",
+    "TextChoicesField",
+    "IntegerChoicesField",
 ]

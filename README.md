@@ -6,7 +6,7 @@
 ![python version](https://img.shields.io/pypi/pyversions/django-choices-field.svg)
 ![django version](https://img.shields.io/pypi/djversions/django-choices-field.svg)
 
-Django field that set/get django's new TextChoices enum.
+Django field that set/get django's new TextChoices/IntegerChoices enum.
 
 ## Install
 
@@ -18,23 +18,33 @@ pip install django-choices-field
 
 ```python
 from django.db import models
-from django_choices_field import ChoicesField
+from django_choices_field import TexChoicesField, IntegerChoicesField
 
 
 class MyModel(models.Model):
-    class MyEnum(models.TextChoices):
+    class TextEnum(models.TextChoices):
         FOO = "foo", "Foo Description"
         BAR = "bar", "Bar Description"
 
-    c_field = ChoicesField(
-        choices_enum=MyEnum,
-        default=MyEnum.FOO,
+    class IntegerEnum(models.TextChoices):
+        FIRST = 1, "First Description"
+        SECOND = 2, "Second Description"
+
+    c_field = TextChoicesField(
+        choices_enum=TextEnum,
+        default=TextEnum.FOO,
+    )
+    i_field = IntegerChoicesField(
+        choices_enum=IntegerEnum,
+        default=IntegerEnum.FIRST,
     )
 
 
 obj = MyModel()
-obj.c_field  # MyModel.MyEnum.FOO
-isinstance(obj.c_field, MyModel.MyEnum) # True
+obj.c_field  # MyModel.TextEnum.FOO
+isinstance(obj.c_field, MyModel.TextEnum) # True
+obj.i_field  # MyModel.IntegerEnum.FIRST
+isinstance(obj.i_field, MyModel.IntegerEnum) # True
 ```
 
 ## License
