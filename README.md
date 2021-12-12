@@ -1,4 +1,4 @@
-# django-choices-field #
+# django-choices-field
 
 [![build status](https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Fbellini666%2Fdjango-choices-field%2Fbadge%3Fref%3Dmaster&style=flat)](https://actions-badge.atrox.dev/bellini666/django-choices-field/goto?ref=master)
 [![coverage](https://img.shields.io/codecov/c/github/bellini666/django-choices-field.svg)](https://codecov.io/gh/bellini666/django-choices-field)
