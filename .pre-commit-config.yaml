@@ -8,10 +8,13 @@ repos:
       - id: check-yaml
       - id: check-added-large-files
         args: ["--maxkb=1024"]
+
   - repo: https://github.com/asottile/pyupgrade
     rev: v2.21.0
     hooks:
       - id: pyupgrade
+        args: ["--py38-plus"]
+
   - repo: https://github.com/pycqa/isort
     rev: 5.10.1
     hooks:
@@ -23,11 +26,13 @@ repos:
       - id: isort
         name: isort (pyi)
         types: [pyi]
+
   - repo: https://github.com/psf/black
     rev: 21.12b0
     hooks:
       - id: black
         args: ["--config", "pyproject.toml"]
+
   - repo: https://gitlab.com/pycqa/flake8
     rev: 4.0.1
     hooks:
