@@ -97,7 +97,6 @@ strictSetInference = true
 [tool.pytest.ini_options]
 DJANGO_SETTINGS_MODULE = "tests.settings"
 python_files = "tests/test_*.py"
-django_find_projects = false
 addopts = "--cov=./ -vv"
 
 [build-system]

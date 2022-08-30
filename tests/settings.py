@@ -5,6 +5,7 @@ from django.db.models.query import QuerySet
 for cls in [QuerySet, BaseManager, models.ForeignKey]:
     cls.__class_getitem__ = classmethod(lambda cls, *args, **kwargs: cls)  # type:ignore
 
+USE_TZ = True
 
 INSTALLED_APPS = [
     "django.contrib.auth",
