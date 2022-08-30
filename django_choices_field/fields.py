@@ -75,7 +75,7 @@ class IntegerChoicesField(models.IntegerField):
             return None
 
         try:
-            return self.choices_enum(value)
+            return self.choices_enum(int(value) if isinstance(value, str) else value)
         except ValueError:
             raise ValidationError(
                 self.error_messages["invalid"],
@@ -89,3 +89,11 @@ class IntegerChoicesField(models.IntegerField):
     def get_prep_value(self, value):
         value = super().get_prep_value(value)
         return self.to_python(value)
+
+    def formfield(self, **kwargs):  # pragma:nocover
+        return super().formfield(
+            **{
+                "coerce": self.to_python,
+                **kwargs,
+            }
+        )

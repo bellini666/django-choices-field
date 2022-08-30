@@ -79,9 +79,21 @@ def test_set_none_integer(db):
     assert m.i_field_nullable is None
 
 
+def test_set_text_integer(db):
+    m = MyModel(i_field_nullable=MyModel.IntegerEnum.I_FOO)
+    assert isinstance(m.i_field_nullable, MyModel.IntegerEnum)
+    assert m.i_field_nullable == MyModel.IntegerEnum.I_FOO
+    m.i_field = "2"  # type:ignore
+    m.save()
+
+    m = MyModel.objects.get(pk=m.pk)
+    assert m.i_field == 2
+
+
 @pytest.mark.parametrize("v", [10, "abc"])
 def test_set_wrong_value_text(v, db):
     m = MyModel()
+    m.c_field
     with pytest.raises(ValidationError) as exc:
         m.c_field = v
         m.save()
