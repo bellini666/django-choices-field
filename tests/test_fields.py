@@ -83,7 +83,7 @@ def test_set_none_integer(db):
 def test_set_wrong_value_text(v, db):
     m = MyModel()
     with pytest.raises(ValidationError) as exc:
-        m.c_field = v  # type:ignore (we really want the error here)
+        m.c_field = v
         m.save()
 
     assert list(exc.value) == [f"“{v}” must be a subclass of <enum 'TextEnum'>."]
@@ -101,7 +101,7 @@ def test_set_wrong_value_integer(v, db):
     else:
         m = MyModel()
         with pytest.raises(ValueError) as exc:
-            m.i_field = v  # type:ignore (we really want the error here)
+            m.i_field = v
             m.save()
 
         assert str(exc.value) == f"Field 'i_field' expected a number but got '{v}'."
