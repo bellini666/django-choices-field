@@ -18,7 +18,7 @@ pip install django-choices-field
 
 ```python
 from django.db import models
-from django_choices_field import TexChoicesField, IntegerChoicesField
+from django_choices_field import TextChoicesField, IntegerChoicesField
 
 
 class MyModel(models.Model):
