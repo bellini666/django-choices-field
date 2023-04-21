@@ -1,86 +1,82 @@
 from typing import (
     Any,
     Callable,
-    Dict,
     Generic,
     Iterable,
     Literal,
     Optional,
-    Tuple,
-    Type,
     TypeVar,
-    Union,
     overload,
 )
 
 from django.db.models import Field, IntegerChoices, TextChoices
 
-_Choice = Tuple[Any, str]
-_ChoiceNamedGroup = Tuple[str, Iterable[_Choice]]
-_FieldChoices = Iterable[Union[_Choice, _ChoiceNamedGroup]]
-_ValidatorCallable = Callable[..., None]
-_ErrorMessagesToOverride = Dict[str, Any]
+_Choice = ...
+_ChoiceNamedGroup = ...
+_FieldChoices = ...
+_ValidatorCallable = ...
+_ErrorMessagesToOverride = ...
 
 _C = TypeVar("_C", bound="Optional[TextChoices]")
 
 class TextChoicesField(Generic[_C], Field[_C, _C]):
-    choices_enum: Type[_C]
+    choices_enum: type[_C]
     @overload
     def __init__(
         self: TextChoicesField[_C],
-        choices_enum: Type[_C],
-        verbose_name: Optional[str] = ...,
-        name: Optional[str] = ...,
+        choices_enum: type[_C],
+        verbose_name: str | None = ...,
+        name: str | None = ...,
         primary_key: bool = ...,
-        max_length: Optional[int] = ...,
+        max_length: int | None = ...,
         unique: bool = ...,
         blank: bool = ...,
         null: Literal[False] = ...,
         db_index: bool = ...,
-        default: Union[_C, Callable[[], _C]] = ...,
+        default: _C | Callable[[], _C] = ...,
         editable: bool = ...,
         auto_created: bool = ...,
         serialize: bool = ...,
-        unique_for_date: Optional[str] = ...,
-        unique_for_month: Optional[str] = ...,
-        unique_for_year: Optional[str] = ...,
+        unique_for_date: str | None = ...,
+        unique_for_month: str | None = ...,
+        unique_for_year: str | None = ...,
         help_text: str = ...,
-        db_column: Optional[str] = ...,
-        db_tablespace: Optional[str] = ...,
+        db_column: str | None = ...,
+        db_tablespace: str | None = ...,
         validators: Iterable[_ValidatorCallable] = ...,
-        error_messages: Optional[_ErrorMessagesToOverride] = ...,
-        path: Union[str, Callable[..., str]] = ...,
-        match: Optional[str] = ...,
+        error_messages: _ErrorMessagesToOverride | None = ...,
+        path: str | Callable[..., str] = ...,
+        match: str | None = ...,
         recursive: bool = ...,
         allow_files: bool = ...,
         allow_folders: bool = ...,
     ) -> None: ...
     @overload
     def __init__(
-        self: TextChoicesField[Optional[_C]],
-        choices_enum: Type[_C],
-        verbose_name: Optional[str] = ...,
-        name: Optional[str] = ...,
+        self: TextChoicesField[_C | None],
+        choices_enum: type[_C],
+        verbose_name: str | None = ...,
+        name: str | None = ...,
         primary_key: bool = ...,
-        max_length: Optional[int] = ...,
+        max_length: int | None = ...,
         unique: bool = ...,
         blank: bool = ...,
         null: Literal[True] = ...,
         db_index: bool = ...,
-        default: Optional[Union[_C, Callable[[], _C]]] = ...,
+        default: _C | Callable[[], _C] | None = ...,
         editable: bool = ...,
         auto_created: bool = ...,
         serialize: bool = ...,
-        unique_for_date: Optional[str] = ...,
-        unique_for_month: Optional[str] = ...,
-        unique_for_year: Optional[str] = ...,
+        unique_for_date: str | None = ...,
+        unique_for_month: str | None = ...,
+        unique_for_year: str | None = ...,
         help_text: str = ...,
-        db_column: Optional[str] = ...,
-        db_tablespace: Optional[str] = ...,
+        db_column: str | None = ...,
+        db_tablespace: str | None = ...,
         validators: Iterable[_ValidatorCallable] = ...,
-        error_messages: Optional[_ErrorMessagesToOverride] = ...,
-        path: Union[str, Callable[..., str]] = ...,
-        match: Optional[str] = ...,
+        error_messages: _ErrorMessagesToOverride | None = ...,
+        path: str | Callable[..., str] = ...,
+        match: str | None = ...,
         recursive: bool = ...,
         allow_files: bool = ...,
         allow_folders: bool = ...,
@@ -88,7 +84,7 @@ class TextChoicesField(Generic[_C], Field[_C, _C]):
     @overload
     def __new__(
         cls,
-        choices_enum: Type[_C],
+        choices_enum: type[_C],
         *args: Any,
         null: Literal[False] = ...,
         **kwargs: Any,
@@ -96,72 +92,72 @@ class TextChoicesField(Generic[_C], Field[_C, _C]):
     @overload
     def __new__(
         cls,
-        choices_enum: Type[_C],
+        choices_enum: type[_C],
         *args: Any,
         null: Literal[True],
         **kwargs: Any,
-    ) -> TextChoicesField[Optional[_C]]: ...
+    ) -> TextChoicesField[_C | None]: ...
 
 _I = TypeVar("_I", bound="Optional[IntegerChoices]")
 
 class IntegerChoicesField(Generic[_I], Field[_I, _I]):
-    choices_enum: Type[_I]
+    choices_enum: type[_I]
     @overload
     def __init__(
         self: IntegerChoicesField[_I],
-        choices_enum: Type[_I],
-        verbose_name: Optional[str] = ...,
-        name: Optional[str] = ...,
+        choices_enum: type[_I],
+        verbose_name: str | None = ...,
+        name: str | None = ...,
         primary_key: bool = ...,
-        max_length: Optional[int] = ...,
+        max_length: int | None = ...,
         unique: bool = ...,
         blank: bool = ...,
         null: Literal[False] = ...,
         db_index: bool = ...,
-        default: Union[_I, Callable[[], _I]] = ...,
+        default: _I | Callable[[], _I] = ...,
         editable: bool = ...,
         auto_created: bool = ...,
         serialize: bool = ...,
-        unique_for_date: Optional[str] = ...,
-        unique_for_month: Optional[str] = ...,
-        unique_for_year: Optional[str] = ...,
+        unique_for_date: str | None = ...,
+        unique_for_month: str | None = ...,
+        unique_for_year: str | None = ...,
         help_text: str = ...,
-        db_column: Optional[str] = ...,
-        db_tablespace: Optional[str] = ...,
+        db_column: str | None = ...,
+        db_tablespace: str | None = ...,
         validators: Iterable[_ValidatorCallable] = ...,
-        error_messages: Optional[_ErrorMessagesToOverride] = ...,
-        path: Union[str, Callable[..., str]] = ...,
-        match: Optional[str] = ...,
+        error_messages: _ErrorMessagesToOverride | None = ...,
+        path: str | Callable[..., str] = ...,
+        match: str | None = ...,
         recursive: bool = ...,
         allow_files: bool = ...,
         allow_folders: bool = ...,
     ) -> None: ...
     @overload
     def __init__(
-        self: IntegerChoicesField[Optional[_I]],
-        choices_enum: Type[_I],
-        verbose_name: Optional[str] = ...,
-        name: Optional[str] = ...,
+        self: IntegerChoicesField[_I | None],
+        choices_enum: type[_I],
+        verbose_name: str | None = ...,
+        name: str | None = ...,
         primary_key: bool = ...,
-        max_length: Optional[int] = ...,
+        max_length: int | None = ...,
         unique: bool = ...,
         blank: bool = ...,
         null: Literal[True] = ...,
         db_index: bool = ...,
-        default: Optional[Union[_I, Callable[[], _I]]] = ...,
+        default: _I | Callable[[], _I] | None = ...,
         editable: bool = ...,
         auto_created: bool = ...,
         serialize: bool = ...,
-        unique_for_date: Optional[str] = ...,
-        unique_for_month: Optional[str] = ...,
-        unique_for_year: Optional[str] = ...,
+        unique_for_date: str | None = ...,
+        unique_for_month: str | None = ...,
+        unique_for_year: str | None = ...,
         help_text: str = ...,
-        db_column: Optional[str] = ...,
-        db_tablespace: Optional[str] = ...,
+        db_column: str | None = ...,
+        db_tablespace: str | None = ...,
         validators: Iterable[_ValidatorCallable] = ...,
-        error_messages: Optional[_ErrorMessagesToOverride] = ...,
-        path: Union[str, Callable[..., str]] = ...,
-        match: Optional[str] = ...,
+        error_messages: _ErrorMessagesToOverride | None = ...,
+        path: str | Callable[..., str] = ...,
+        match: str | None = ...,
         recursive: bool = ...,
         allow_files: bool = ...,
         allow_folders: bool = ...,
@@ -169,7 +165,7 @@ class IntegerChoicesField(Generic[_I], Field[_I, _I]):
     @overload
     def __new__(
         cls,
-        choices_enum: Type[_I],
+        choices_enum: type[_I],
         *args: Any,
         null: Literal[False] = ...,
         **kwargs: Any,
@@ -177,8 +173,8 @@ class IntegerChoicesField(Generic[_I], Field[_I, _I]):
     @overload
     def __new__(
         cls,
-        choices_enum: Type[_I],
+        choices_enum: type[_I],
         *args: Any,
         null: Literal[True],
         **kwargs: Any,
-    ) -> IntegerChoicesField[Optional[_I]]: ...
+    ) -> IntegerChoicesField[_I | None]: ...

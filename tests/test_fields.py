@@ -1,5 +1,5 @@
-from django.core.exceptions import ValidationError
 import pytest
+from django.core.exceptions import ValidationError
 
 from .models import MyModel
 
@@ -93,9 +93,8 @@ def test_set_text_integer(db):
 @pytest.mark.parametrize("v", [10, "abc"])
 def test_set_wrong_value_text(v, db):
     m = MyModel()
-    m.c_field
+    m.c_field = v
     with pytest.raises(ValidationError) as exc:
-        m.c_field = v
         m.save()
 
     assert list(exc.value) == [f"“{v}” must be a subclass of <enum 'TextEnum'>."]
@@ -105,15 +104,15 @@ def test_set_wrong_value_text(v, db):
 def test_set_wrong_value_integer(v, db):
     if isinstance(v, int):
         m = MyModel()
+        m.i_field = v  # type:ignore (we really want the error here)
         with pytest.raises(ValidationError) as exc:
-            m.i_field = v  # type:ignore (we really want the error here)
             m.save()
 
         assert list(exc.value) == [f"“{v}” must be a subclass of <enum 'IntegerEnum'>."]
     else:
         m = MyModel()
-        with pytest.raises(ValueError) as exc:
-            m.i_field = v
+        m.i_field = v
+        with pytest.raises(ValueError) as exc:  # noqa: PT011
             m.save()
 
         assert str(exc.value) == f"Field 'i_field' expected a number but got '{v}'."

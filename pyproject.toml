@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "django-choices-field"
-version = "2.1"
+version = "2.1.1"
 description = "Django field that set/get django's new TextChoices/IntegerChoices enum."
 authors = ["Thiago Bellini Ribeiro <thiago@bellini.dev>"]
 license = "MIT"
@@ -20,39 +20,33 @@ classifiers = [
   "Programming Language :: Python :: 3.8",
   "Programming Language :: Python :: 3.9",
   "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
   "Framework :: Django",
   "Framework :: Django :: 3.2",
   "Framework :: Django :: 4.0",
   "Framework :: Django :: 4.1",
+  "Framework :: Django :: 4.2",
 ]
 packages = [{ include = "django_choices_field" }]
 
 [tool.poetry.dependencies]
 python = "^3.8"
+django = ">=3.2"
 
 [tool.poetry.dev-dependencies]
-black = "^22.3.0"
+black = "^23.3.0"
 codecov = "^2.1.11"
 django = "^4.0"
-django-types = "^0.16.0"
-flake8 = "^4.0.1"
-flake8-broken-line = "^0.5.0"
-flake8-bugbear = "^22.4.25"
-flake8-builtins = "^1.5.3"
-flake8-comprehensions = "^3.5.0"
-flake8-polyfill = "^1.0.2"
-flake8-return = "^1.1.3"
-flake8-simplify = "^0.19.2"
-mock = "^4.0.3"
-pynvim = "^0.4.3"
+django-types = "^0.17.0"
 pytest = "^7.1.2"
-pytest-cov = "^3.0.0"
+pytest-cov = "^4.0.0"
 pytest-django = "^4.2.0"
-isort = "^5.9.2"
+ruff = "^0.0.262"
 
 [tool.black]
 line-length = 100
-target-version = ['py37', 'py38', 'py39']
+target-version = ['py38']
+preview = true
 exclude = '''
 /(
     \.eggs
@@ -69,16 +63,91 @@ exclude = '''
 )/
 '''
 
-[tool.isort]
-profile = "black"
-multi_line_output = 3
-force_sort_within_sections = true
+[tool.ruff]
+line-length = 100
+select = [
+  "E",
+  "F",
+  "W",
+  "I",
+  "N",
+  "D",
+  "UP",
+  "YTT",
+  "D2",
+  "D3",
+  "D4",
+  "BLE",
+  "B",
+  "A",
+  "COM",
+  "C4",
+  "DTZ",
+  "T10",
+  "EXE",
+  "ISC",
+  "ICN001",
+  "G",
+  "INP",
+  "PIE",
+  "T20",
+  "PYI",
+  "PT",
+  "Q",
+  "RET",
+  "SIM",
+  "TID",
+  "TCH",
+  "PTH",
+  "ERA",
+  "PGH",
+  "PL",
+  "RSE",
+  "RUF",
+  "TRY",
+  "SLF",
+]
+ignore = [
+  "D1",
+  "D203",
+  "D213",
+  "TCH001",
+  "TCH002",
+  "TCH003",
+  "PGH003",
+  "PLR09",
+  "PLR2004",
+  "SLF001",
+  "TRY003",
+]
+target-version = "py38"
+exclude = [
+  ".eggs",
+  ".git",
+  ".hg",
+  ".mypy_cache",
+  ".tox",
+  ".venv",
+  "__pycached__",
+  "_build",
+  "buck-out",
+  "build",
+  "dist",
+]
+
+[tool.ruff.pyupgrade]
+
+[tool.ruff.isort]
+
+[tool.ruff.pydocstyle]
+convention = "google"
 
 [tool.pyright]
 pythonVersion = "3.8"
 useLibraryCodeForTypes = true
 venvPath = "."
 venv = ".venv"
+ignore = ["**/migrations"]
 reportCallInDefaultInitializer = "warning"
 reportMatchNotExhaustive = "warning"
 reportMissingSuperCall = "warning"

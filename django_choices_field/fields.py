@@ -33,12 +33,12 @@ class TextChoicesField(models.CharField):
 
         try:
             return self.choices_enum(value)
-        except ValueError:
+        except ValueError as e:
             raise ValidationError(
                 self.error_messages["invalid"],
                 code="invalid",
                 params={"value": value, "enum": self.choices_enum},
-            )
+            ) from e
 
     def from_db_value(self, value, expression, connection):
         return self.to_python(value)
@@ -76,12 +76,12 @@ class IntegerChoicesField(models.IntegerField):
 
         try:
             return self.choices_enum(int(value) if isinstance(value, str) else value)
-        except ValueError:
+        except ValueError as e:
             raise ValidationError(
                 self.error_messages["invalid"],
                 code="invalid",
                 params={"value": value, "enum": self.choices_enum},
-            )
+            ) from e
 
     def from_db_value(self, value, expression, connection):
         return self.to_python(value)
@@ -95,5 +95,5 @@ class IntegerChoicesField(models.IntegerField):
             **{
                 "coerce": self.to_python,
                 **kwargs,
-            }
+            },
         )
