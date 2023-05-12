@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "django-choices-field"
-version = "2.1.1"
+version = "2.1.2"
 description = "Django field that set/get django's new TextChoices/IntegerChoices enum."
 authors = ["Thiago Bellini Ribeiro <thiago@bellini.dev>"]
 license = "MIT"
@@ -41,7 +41,7 @@ django-types = "^0.17.0"
 pytest = "^7.1.2"
 pytest-cov = "^4.0.0"
 pytest-django = "^4.2.0"
-ruff = "^0.0.262"
+ruff = "^0.0.265"
 
 [tool.black]
 line-length = 100

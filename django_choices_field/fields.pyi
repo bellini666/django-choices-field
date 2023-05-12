@@ -16,7 +16,7 @@ from typing_extensions import TypeAlias
 _ValidatorCallable: TypeAlias = Callable[..., None]
 _ErrorMessagesToOverride: TypeAlias = Dict[str, Any]
 
-_C = TypeVar("_C", bound="Optional[TextChoices]")
+_C = TypeVar("_C", bound=Optional[TextChoices])
 
 class TextChoicesField(Generic[_C], Field[_C, _C]):
     choices_enum: type[_C]
@@ -81,7 +81,7 @@ class TextChoicesField(Generic[_C], Field[_C, _C]):
         allow_folders: bool = ...,
     ) -> TextChoicesField[_C | None]: ...
 
-_I = TypeVar("_I", bound="Optional[IntegerChoices]")
+_I = TypeVar("_I", bound=Optional[IntegerChoices])
 
 class IntegerChoicesField(Generic[_I], Field[_I, _I]):
     choices_enum: type[_I]
