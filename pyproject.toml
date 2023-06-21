@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "django-choices-field"
-version = "2.1.2"
+version = "2.2.0"
 description = "Django field that set/get django's new TextChoices/IntegerChoices enum."
 authors = ["Thiago Bellini Ribeiro <thiago@bellini.dev>"]
 license = "MIT"
@@ -32,6 +32,7 @@ packages = [{ include = "django_choices_field" }]
 [tool.poetry.dependencies]
 python = "^3.8"
 django = ">=3.2"
+typing_extensions = ">=4.0.0"
 
 [tool.poetry.dev-dependencies]
 black = "^23.3.0"

@@ -17,8 +17,10 @@ pip install django-choices-field
 ## Usage
 
 ```python
+import enum
+
 from django.db import models
-from django_choices_field import TextChoicesField, IntegerChoicesField
+from django_choices_field import TextChoicesField, IntegerChoicesField, IntegerChoicesFlag
 
 
 class MyModel(models.Model):
@@ -30,22 +32,40 @@ class MyModel(models.Model):
         FIRST = 1, "First Description"
         SECOND = 2, "Second Description"
 
-    c_field = TextChoicesField(
+    class IntegerFlagEnum(IntegerChoicesFlag):
+        FIRST = enum.auto(), "First Option"
+        SECOND = enum.auto(), "Second Option"
+        THIRD = enum.auto(), "Third Option"
+
+    text_field = TextChoicesField(
         choices_enum=TextEnum,
         default=TextEnum.FOO,
     )
-    i_field = IntegerChoicesField(
+    integer_field = IntegerChoicesField(
         choices_enum=IntegerEnum,
         default=IntegerEnum.FIRST,
+    )
+    flag_field = IntegerChoicesFlagField(
+        choices_enum=IntegerFlagEnum,
+        default=IntegerFlagEnum.FIRST | IntegerFlagEnum.SECOND,
     )
 
 
 obj = MyModel()
-obj.c_field  # MyModel.TextEnum.FOO
-isinstance(obj.c_field, MyModel.TextEnum) # True
-obj.i_field  # MyModel.IntegerEnum.FIRST
-isinstance(obj.i_field, MyModel.IntegerEnum) # True
+reveal_type(obj.text_field)  # MyModel.TextEnum.FOO
+assert isinstance(obj.text_field, MyModel.TextEnum)
+assert obj.text_field == "foo"
+
+reveal_type(obj.integer_field)  # MyModel.IntegerEnum.FIRST
+assert isinstance(obj.integer_field, MyModel.IntegerEnum)
+assert obj.integer_field == 1
+
+reveal_type(obj.flag_field)  # MyModel.IntegerFlagEnum.FIRST | MyModel.IntegerFlagEnum.SECOND
+assert isinstance(obj.integer_field, MyModel.IntegerFlagEnum)
+assert obj.flag_field == 3
 ```
+
+NOTE: The `IntegerChoicesFlag` requires python 3.11+ to work properly.
 
 ## License
 

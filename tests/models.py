@@ -1,6 +1,11 @@
+import enum
+import sys
+
 from django.db import models
 
 from django_choices_field import IntegerChoicesField, TextChoicesField
+from django_choices_field.fields import IntegerChoicesFlagField
+from django_choices_field.types import IntegerChoicesFlag
 
 
 class MyModel(models.Model):
@@ -11,6 +16,11 @@ class MyModel(models.Model):
     class IntegerEnum(models.IntegerChoices):
         I_FOO = 1, "I Foo Description"
         I_BAR = 2, "I Bar Description"
+
+    class IntegerFlagEnum(IntegerChoicesFlag):
+        IF_FOO = enum.auto() if sys.version_info >= (3, 11) else 1, "IF Foo Description"
+        IF_BAR = enum.auto() if sys.version_info >= (3, 11) else 2, "IF Bar Description"
+        IF_BIN = enum.auto() if sys.version_info >= (3, 11) else 4, "IF Bin Description"
 
     objects = models.Manager["MyModel"]()
 
@@ -28,5 +38,13 @@ class MyModel(models.Model):
     )
     i_field_nullable = IntegerChoicesField(
         choices_enum=IntegerEnum,
+        null=True,
+    )
+    if_field = IntegerChoicesFlagField(
+        choices_enum=IntegerFlagEnum,
+        default=IntegerFlagEnum.IF_FOO,
+    )
+    if_field_nullable = IntegerChoicesFlagField(
+        choices_enum=IntegerFlagEnum,
         null=True,
     )
