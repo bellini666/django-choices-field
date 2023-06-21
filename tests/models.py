@@ -2,6 +2,7 @@ import enum
 import sys
 
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 
 from django_choices_field import IntegerChoicesField, TextChoicesField
 from django_choices_field.fields import IntegerChoicesFlagField
@@ -21,6 +22,11 @@ class MyModel(models.Model):
         IF_FOO = enum.auto() if sys.version_info >= (3, 11) else 1, "IF Foo Description"
         IF_BAR = enum.auto() if sys.version_info >= (3, 11) else 2, "IF Bar Description"
         IF_BIN = enum.auto() if sys.version_info >= (3, 11) else 4, "IF Bin Description"
+
+    class IntegerFlagEnumTranslated(IntegerChoicesFlag):
+        IF_FOO = enum.auto() if sys.version_info >= (3, 11) else 1, _("IF Foo Description")
+        IF_BAR = enum.auto() if sys.version_info >= (3, 11) else 2, _("IF Bar Description")
+        IF_BIN = enum.auto() if sys.version_info >= (3, 11) else 4, _("IF Bin Description")
 
     objects = models.Manager["MyModel"]()
 
@@ -46,5 +52,13 @@ class MyModel(models.Model):
     )
     if_field_nullable = IntegerChoicesFlagField(
         choices_enum=IntegerFlagEnum,
+        null=True,
+    )
+    ift_field = IntegerChoicesFlagField(
+        choices_enum=IntegerFlagEnumTranslated,
+        default=IntegerFlagEnumTranslated.IF_FOO,
+    )
+    ift_field_nullable = IntegerChoicesFlagField(
+        choices_enum=IntegerFlagEnumTranslated,
         null=True,
     )

@@ -1,11 +1,27 @@
 import functools
 import itertools
-from typing import ClassVar, Dict, Optional, Type
+from typing import Callable, ClassVar, Dict, Optional, Sequence, Type, cast
 
 from django.core.exceptions import ValidationError
 from django.db import models
 
 from .types import IntegerChoicesFlag
+
+
+def _get_flag_description(descs: Sequence[str]) -> str:
+    return "|".join(str(desc) for desc in descs)
+
+
+try:
+    from django.utils.functional import Promise, lazy
+except ImportError:  # pragma: nocover
+    Promise = None
+    _get_flag_description_lazy = None
+else:
+    _get_flag_description_lazy = cast(
+        Callable[[Sequence[str]], str],
+        lazy(_get_flag_description, str),
+    )
 
 
 class TextChoicesField(models.CharField):
@@ -122,12 +138,16 @@ class IntegerChoicesFlagField(models.IntegerField):
         kwargs["choices"] = default_choices[:]
         for i in range(1, len(default_choices)):
             for combination in itertools.combinations(default_choices, i + 1):
-                kwargs["choices"].append(
-                    (
-                        functools.reduce(lambda a, b: a | b[0], combination, 0),
-                        "|".join(c[1] for c in combination),
-                    ),
-                )
+                value = functools.reduce(lambda a, b: a | b[0], combination, 0)
+
+                descs = [c[1] for c in combination]
+                if Promise is not None and any(isinstance(desc, Promise) for desc in descs):
+                    assert _get_flag_description_lazy is not None
+                    desc = _get_flag_description_lazy(descs)
+                else:
+                    desc = _get_flag_description(descs)
+
+                kwargs["choices"].append((value, desc))
 
         super().__init__(verbose_name=verbose_name, name=name, **kwargs)
 

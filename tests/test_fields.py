@@ -24,7 +24,10 @@ def test_field_choices_integer(fname: str):
     ]
 
 
-@pytest.mark.parametrize("fname", ["if_field", "if_field_nullable"])
+@pytest.mark.parametrize(
+    "fname",
+    ["if_field", "if_field_nullable", "ift_field", "ift_field_nullable"],
+)
 def test_field_choices_integer_flags(fname: str):
     f = MyModel._meta.get_field(fname)
     assert f.choices == [
