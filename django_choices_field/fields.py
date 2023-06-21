@@ -1,12 +1,12 @@
-from typing import Optional, Type
+from typing import ClassVar, Dict, Optional, Type
 
 from django.core.exceptions import ValidationError
 from django.db import models
 
 
 class TextChoicesField(models.CharField):
-    description = "TextChoices"
-    default_error_messages = {
+    description: ClassVar[str] = "TextChoices"
+    default_error_messages: ClassVar[Dict[str, str]] = {
         "invalid": "“%(value)s” must be a subclass of %(enum)s.",
     }
 
@@ -49,8 +49,8 @@ class TextChoicesField(models.CharField):
 
 
 class IntegerChoicesField(models.IntegerField):
-    description = "IntegerChoices"
-    default_error_messages = {
+    description: ClassVar[str] = "IntegerChoices"
+    default_error_messages: ClassVar[Dict[str, str]] = {
         "invalid": "“%(value)s” must be a subclass of %(enum)s.",
     }
 
