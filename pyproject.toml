@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "django-choices-field"
-version = "2.2.1"
+version = "2.2.2"
 description = "Django field that set/get django's new TextChoices/IntegerChoices enum."
 authors = ["Thiago Bellini Ribeiro <thiago@bellini.dev>"]
 license = "MIT"
@@ -17,6 +17,7 @@ classifiers = [
   "Operating System :: OS Independent",
   "Programming Language :: Python",
   "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.7",
   "Programming Language :: Python :: 3.8",
   "Programming Language :: Python :: 3.9",
   "Programming Language :: Python :: 3.10",
@@ -30,7 +31,7 @@ classifiers = [
 packages = [{ include = "django_choices_field" }]
 
 [tool.poetry.dependencies]
-python = "^3.8"
+python = ">=3.7"
 django = ">=3.2"
 typing_extensions = ">=4.0.0"
 
@@ -46,7 +47,7 @@ ruff = "^0.0.274"
 
 [tool.black]
 line-length = 100
-target-version = ['py38']
+target-version = ['py37']
 preview = true
 exclude = '''
 /(
@@ -121,7 +122,7 @@ ignore = [
   "SLF001",
   "TRY003",
 ]
-target-version = "py38"
+target-version = "py37"
 exclude = [
   ".eggs",
   ".git",
@@ -142,7 +143,7 @@ exclude = [
 convention = "google"
 
 [tool.pyright]
-pythonVersion = "3.8"
+pythonVersion = "3.7"
 useLibraryCodeForTypes = true
 venvPath = "."
 venv = ".venv"
