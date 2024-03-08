@@ -26,15 +26,17 @@ jobs:
     strategy:
       matrix:
         django-version:
-          - 3.2.0
-          - 4.0.0
-          - 4.1.0
-          - 4.2.0
+          - 3.2.*
+          - 4.0.*
+          - 4.1.*
+          - 4.2.*
+          - 5.0.*
         python-version:
           - '3.8'
           - '3.9'
           - '3.10'
           - '3.11'
+          - '3.12'
     steps:
       - name: Checkout
         uses: actions/checkout@v2

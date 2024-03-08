@@ -17,7 +17,6 @@ classifiers = [
   "Operating System :: OS Independent",
   "Programming Language :: Python",
   "Programming Language :: Python :: 3",
-  "Programming Language :: Python :: 3.7",
   "Programming Language :: Python :: 3.8",
   "Programming Language :: Python :: 3.9",
   "Programming Language :: Python :: 3.10",
@@ -27,27 +26,28 @@ classifiers = [
   "Framework :: Django :: 4.0",
   "Framework :: Django :: 4.1",
   "Framework :: Django :: 4.2",
+  "Framework :: Django :: 5.0",
 ]
 packages = [{ include = "django_choices_field" }]
 
 [tool.poetry.dependencies]
-python = ">=3.7"
+python = ">=3.8,<4.0"
 django = ">=3.2"
 typing_extensions = ">=4.0.0"
 
 [tool.poetry.dev-dependencies]
-black = "^23.3.0"
+black = "^24.2.0"
 codecov = "^2.1.11"
 django = "^4.0"
-django-types = "^0.17.0"
-pytest = "^7.1.2"
+django-types = "^0.19.1"
+pytest = "^8.0.2"
 pytest-cov = "^4.0.0"
 pytest-django = "^4.2.0"
 ruff = "^0.0.274"
 
 [tool.black]
 line-length = 100
-target-version = ['py37']
+target-version = ['py38']
 preview = true
 exclude = '''
 /(
@@ -143,7 +143,7 @@ exclude = [
 convention = "google"
 
 [tool.pyright]
-pythonVersion = "3.7"
+pythonVersion = "3.8"
 useLibraryCodeForTypes = true
 venvPath = "."
 venv = ".venv"
@@ -159,6 +159,8 @@ reportUntypedNamedTuple = "error"
 reportUnusedExpression = "warning"
 reportUnnecessaryComparison = "warning"
 reportUnnecessaryContains = "warning"
+reportIncompatibleVariableOverride = "none"
+reportIncompatibleMethodOverride = "none"
 strictDictionaryInference = true
 strictListInference = true
 strictSetInference = true

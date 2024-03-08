@@ -19,16 +19,34 @@ class MyModel(models.Model):
         I_BAR = 2, "I Bar Description"
 
     class IntegerFlagEnum(IntegerChoicesFlag):
-        IF_FOO = enum.auto() if sys.version_info >= (3, 11) else 1, "IF Foo Description"
-        IF_BAR = enum.auto() if sys.version_info >= (3, 11) else 2, "IF Bar Description"
-        IF_BIN = enum.auto() if sys.version_info >= (3, 11) else 4, "IF Bin Description"
+        IF_FOO = (
+            enum.auto() if sys.version_info >= (3, 11) else 1,
+            "IF Foo Description",  # type: ignore
+        )
+        IF_BAR = (
+            enum.auto() if sys.version_info >= (3, 11) else 2,
+            "IF Bar Description",  # type: ignore
+        )
+        IF_BIN = (
+            enum.auto() if sys.version_info >= (3, 11) else 4,
+            "IF Bin Description",  # type: ignore
+        )
 
     class IntegerFlagEnumTranslated(IntegerChoicesFlag):
-        IF_FOO = enum.auto() if sys.version_info >= (3, 11) else 1, _("IF Foo Description")
-        IF_BAR = enum.auto() if sys.version_info >= (3, 11) else 2, _("IF Bar Description")
-        IF_BIN = enum.auto() if sys.version_info >= (3, 11) else 4, _("IF Bin Description")
+        IF_FOO = (
+            enum.auto() if sys.version_info >= (3, 11) else 1,
+            _("IF Foo Description"),  # type: ignore
+        )
+        IF_BAR = (
+            enum.auto() if sys.version_info >= (3, 11) else 2,
+            _("IF Bar Description"),  # type: ignore
+        )
+        IF_BIN = (
+            enum.auto() if sys.version_info >= (3, 11) else 4,
+            _("IF Bin Description"),  # type: ignore
+        )
 
-    objects = models.Manager["MyModel"]()
+    objects = models.Manager["MyModel"]()  # type: ignore
 
     c_field = TextChoicesField(
         choices_enum=TextEnum,
