@@ -2,6 +2,7 @@ import sys
 
 import pytest
 from django.core.exceptions import ValidationError
+from django.db.models import Sum
 
 from .models import MyModel
 
@@ -222,3 +223,14 @@ def test_set_wrong_value_integer_flag(v, db):
             m.save()
 
         assert str(exc.value) == f"Field 'if_field' expected a number but got '{v}'."
+
+
+@pytest.mark.skip(reason="TODO: Fix the aggregation coercion issue.")
+def test_aggregate_integer(db):
+    MyModel.objects.bulk_create([
+        MyModel(),
+        MyModel(),
+        MyModel(),
+    ])
+    queryset = MyModel.objects.all()
+    assert queryset.aggregate(sum=Sum("i_field")).get("sum", 0) == 3
