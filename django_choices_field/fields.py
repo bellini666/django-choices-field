@@ -38,8 +38,9 @@ class TextChoicesField(models.CharField):
         **kwargs,
     ):
         self.choices_enum = choices_enum
-        kwargs["choices"] = choices_enum.choices
-        kwargs.setdefault("max_length", max(len(c.value) for c in choices_enum))
+        if "choices" not in kwargs:
+            kwargs["choices"] = choices_enum.choices
+        kwargs.setdefault("max_length", max(len(c[0]) for c in kwargs["choices"]))
         super().__init__(verbose_name=verbose_name, name=name, **kwargs)
 
     def deconstruct(self):
@@ -82,7 +83,8 @@ class IntegerChoicesField(models.IntegerField):
         **kwargs,
     ):
         self.choices_enum = choices_enum
-        kwargs["choices"] = choices_enum.choices
+        if "choices" not in kwargs:
+            kwargs["choices"] = choices_enum.choices
         super().__init__(verbose_name=verbose_name, name=name, **kwargs)
 
     def deconstruct(self):
@@ -134,20 +136,21 @@ class IntegerChoicesFlagField(models.IntegerField):
     ):
         self.choices_enum = choices_enum
 
-        default_choices = choices_enum.choices
-        kwargs["choices"] = default_choices[:]
-        for i in range(1, len(default_choices)):
-            for combination in itertools.combinations(default_choices, i + 1):
-                value = functools.reduce(lambda a, b: a | b[0], combination, 0)
+        if "choices" not in kwargs:
+            default_choices = choices_enum.choices
+            kwargs["choices"] = default_choices[:]
+            for i in range(1, len(default_choices)):
+                for combination in itertools.combinations(default_choices, i + 1):
+                    value = functools.reduce(lambda a, b: a | b[0], combination, 0)
 
-                descs = [c[1] for c in combination]
-                if Promise is not None and any(isinstance(desc, Promise) for desc in descs):
-                    assert _get_flag_description_lazy is not None
-                    desc = _get_flag_description_lazy(descs)
-                else:
-                    desc = _get_flag_description(descs)
+                    descs = [c[1] for c in combination]
+                    if Promise is not None and any(isinstance(desc, Promise) for desc in descs):
+                        assert _get_flag_description_lazy is not None
+                        desc = _get_flag_description_lazy(descs)
+                    else:
+                        desc = _get_flag_description(descs)
 
-                kwargs["choices"].append((value, desc))
+                    kwargs["choices"].append((value, desc))
 
         super().__init__(verbose_name=verbose_name, name=name, **kwargs)
 
