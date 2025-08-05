@@ -1,6 +1,16 @@
 import functools
 import itertools
-from typing import Callable, ClassVar, Dict, Optional, Sequence, Type, cast
+from typing import (
+    Callable,
+    ClassVar,
+    Dict,
+    List,
+    Optional,
+    Sequence,
+    Tuple,
+    Type,
+    cast,
+)
 
 from django.core.exceptions import ValidationError
 from django.db import models
@@ -10,6 +20,10 @@ from .types import IntegerChoicesFlag
 
 def _get_flag_description(descs: Sequence[str]) -> str:
     return "|".join(str(desc) for desc in descs)
+
+
+def _get_integer_enum_members(choices: List[Tuple[int, str]]) -> Dict[str, int]:
+    return {desc.replace(" ", "_").upper(): value for value, desc in choices}
 
 
 try:
@@ -32,21 +46,20 @@ class TextChoicesField(models.CharField):
 
     def __init__(
         self,
-        choices_enum: Type[models.TextChoices],
+        choices_enum: Optional[Type[models.TextChoices]] = None,
         verbose_name: Optional[str] = None,
         name: Optional[str] = None,
         **kwargs,
     ):
-        self.choices_enum = choices_enum
-        if "choices" not in kwargs:
+        if choices_enum is not None:
+            self.choices_enum = choices_enum
             kwargs["choices"] = choices_enum.choices
+        elif "choices" in kwargs:
+            self.choices_enum = models.TextChoices("ChoicesEnum", kwargs["choices"])
+        else:
+            raise TypeError("either of choices_enum or choices must be provided")
         kwargs.setdefault("max_length", max(len(c[0]) for c in kwargs["choices"]))
         super().__init__(verbose_name=verbose_name, name=name, **kwargs)
-
-    def deconstruct(self):
-        name, path, args, kwargs = super().deconstruct()
-        kwargs["choices_enum"] = self.choices_enum
-        return name, path, args, kwargs
 
     def to_python(self, value):
         if value is None:
@@ -77,20 +90,20 @@ class IntegerChoicesField(models.IntegerField):
 
     def __init__(
         self,
-        choices_enum: Type[models.IntegerChoices],
+        choices_enum: Optional[Type[models.IntegerChoices]] = None,
         verbose_name: Optional[str] = None,
         name: Optional[str] = None,
         **kwargs,
     ):
-        self.choices_enum = choices_enum
-        if "choices" not in kwargs:
+        if choices_enum is not None:
+            self.choices_enum = choices_enum
             kwargs["choices"] = choices_enum.choices
+        elif "choices" in kwargs:
+            enum_members = _get_integer_enum_members(kwargs["choices"])
+            self.choices_enum = models.IntegerChoices("ChoicesEnum", enum_members)
+        else:
+            raise TypeError("either of choices_enum or choices must be provided")
         super().__init__(verbose_name=verbose_name, name=name, **kwargs)
-
-    def deconstruct(self):
-        name, path, args, kwargs = super().deconstruct()
-        kwargs["choices_enum"] = self.choices_enum
-        return name, path, args, kwargs
 
     def to_python(self, value):
         if value is None:
@@ -129,14 +142,14 @@ class IntegerChoicesFlagField(models.IntegerField):
 
     def __init__(
         self,
-        choices_enum: Type[IntegerChoicesFlag],
+        choices_enum: Optional[Type[IntegerChoicesFlag]] = None,
         verbose_name: Optional[str] = None,
         name: Optional[str] = None,
         **kwargs,
     ):
-        self.choices_enum = choices_enum
+        if choices_enum is not None:
+            self.choices_enum = choices_enum
 
-        if "choices" not in kwargs:
             default_choices = choices_enum.choices
             kwargs["choices"] = default_choices[:]
             for i in range(1, len(default_choices)):
@@ -151,13 +164,15 @@ class IntegerChoicesFlagField(models.IntegerField):
                         desc = _get_flag_description(descs)
 
                     kwargs["choices"].append((value, desc))
+        elif "choices" in kwargs:
+            default_choices_length = len(kwargs["choices"]).bit_length()
+            default_choices = [kwargs["choices"][i] for i in range(default_choices_length)]
+            enum_members = _get_integer_enum_members(default_choices)
+            self.choices_enum = models.IntegerChoices("ChoicesEnum", enum_members)
+        else:
+            raise TypeError("either of choices_enum or choices must be provided")
 
         super().__init__(verbose_name=verbose_name, name=name, **kwargs)
-
-    def deconstruct(self):
-        name, path, args, kwargs = super().deconstruct()
-        kwargs["choices_enum"] = self.choices_enum
-        return name, path, args, kwargs
 
     def to_python(self, value):
         if value is None:
