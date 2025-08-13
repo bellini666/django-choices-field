@@ -12,7 +12,6 @@ from typing import (
     cast,
 )
 
-from django.core import validators
 from django.core.exceptions import ValidationError
 from django.db import models
 
@@ -44,7 +43,6 @@ class TextChoicesField(models.CharField):
     default_error_messages: ClassVar[Dict[str, str]] = {
         "invalid": "“%(value)s” must be a subclass of %(enum)s.",
     }
-    empty_values = list(validators.EMPTY_VALUES)
 
     def __init__(
         self,
