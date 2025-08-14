@@ -62,7 +62,7 @@ class TextChoicesField(models.CharField):
         super().__init__(verbose_name=verbose_name, name=name, **kwargs)
 
     def to_python(self, value):
-        if value is None:
+        if value in self.empty_values:
             return None
 
         try:

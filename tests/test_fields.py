@@ -177,6 +177,13 @@ def test_set_text_integer(db):
     assert m.i_field == 2
 
 
+def test_set_empty_value_text(db):
+    # Passing an empty value should not raise an error
+    m = MyModel()
+    m.c_field_nullable = ""
+    m.save()
+
+
 @pytest.mark.parametrize("v", [10, "abc"])
 def test_set_wrong_value_text(v, db):
     m = MyModel()
