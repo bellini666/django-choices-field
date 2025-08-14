@@ -56,7 +56,8 @@ class TextChoicesField(models.CharField):
             kwargs["choices"] = choices_enum.choices
         elif "choices" in kwargs:
             self.choices_enum = models.TextChoices(
-                "ChoicesEnum", [(k, (k, v)) for k, v in kwargs["choices"]]
+                "ChoicesEnum",
+                [(k, (k, v)) for k, v in kwargs["choices"]],
             )
         else:
             raise TypeError("either of choices_enum or choices must be provided")
