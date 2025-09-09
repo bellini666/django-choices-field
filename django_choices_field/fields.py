@@ -53,7 +53,7 @@ class TextChoicesField(models.CharField):
     ):
         if choices_enum is not None:
             self.choices_enum = choices_enum
-            kwargs["choices"] = choices_enum.choices
+            kwargs["choices"] = [(x.value, x.label) for x in choices_enum]
         elif "choices" in kwargs:
             self.choices_enum = models.TextChoices(
                 "ChoicesEnum",
@@ -100,7 +100,7 @@ class IntegerChoicesField(models.IntegerField):
     ):
         if choices_enum is not None:
             self.choices_enum = choices_enum
-            kwargs["choices"] = choices_enum.choices
+            kwargs["choices"] = [(x.value, x.label) for x in choices_enum]
         elif "choices" in kwargs:
             enum_members = _get_integer_enum_members(kwargs["choices"])
             self.choices_enum = models.IntegerChoices("ChoicesEnum", enum_members)
@@ -153,7 +153,7 @@ class IntegerChoicesFlagField(models.IntegerField):
         if choices_enum is not None:
             self.choices_enum = choices_enum
 
-            default_choices = choices_enum.choices
+            default_choices = [(x.value, x.label) for x in choices_enum]
             kwargs["choices"] = default_choices[:]
             for i in range(1, len(default_choices)):
                 for combination in itertools.combinations(default_choices, i + 1):
