@@ -33,6 +33,8 @@ class MyModel(models.Model):
         )
 
     class IntegerFlagEnumTranslated(IntegerChoicesFlag):
+        __empty__ = _("this is the label for the empty value")
+
         IF_FOO = (
             enum.auto() if sys.version_info >= (3, 11) else 1,
             _("IF Foo Description"),  # type: ignore
