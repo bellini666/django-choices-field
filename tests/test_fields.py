@@ -15,10 +15,36 @@ def test_field_choices_text(fname: str):
     ]
 
 
+def test_field_choices_text_with_labelled_empty_state():
+    assert MyModel._meta.get_field("c_field_with_empty_state").choices == [
+        ("foo", "T Foo Description"),
+        ("bar", "T Bar Description"),
+    ]
+
+    assert MyModel._meta.get_field("c_field_with_empty_state_nullable").choices == [
+        (None, "This is the label for the text empty value"),
+        ("foo", "T Foo Description"),
+        ("bar", "T Bar Description"),
+    ]
+
+
 @pytest.mark.parametrize("fname", ["i_field", "i_field_nullable"])
 def test_field_choices_integer(fname: str):
     f = MyModel._meta.get_field(fname)
     assert f.choices == [
+        (1, "I Foo Description"),
+        (2, "I Bar Description"),
+    ]
+
+
+def test_field_choices_integer_with_labelled_empty_state():
+    assert MyModel._meta.get_field("i_field_with_empty_state").choices == [
+        (1, "I Foo Description"),
+        (2, "I Bar Description"),
+    ]
+
+    assert MyModel._meta.get_field("i_field_with_empty_state_nullable").choices == [
+        (None, "This is the label for the int empty value"),
         (1, "I Foo Description"),
         (2, "I Bar Description"),
     ]
@@ -39,6 +65,24 @@ def test_field_choices_integer_flags(fname: str):
         (6, "IF Bar Description|IF Bin Description"),
         (7, "IF Foo Description|IF Bar Description|IF Bin Description"),
     ]
+
+
+def test_field_choices_integer_flags_with_empty_state_label():
+    expected_choices = [
+        (None, "This is the label for the flag empty value"),
+        (1, "IF Foo Description"),
+        (2, "IF Bar Description"),
+        (4, "IF Bin Description"),
+        (3, "IF Foo Description|IF Bar Description"),
+        (5, "IF Foo Description|IF Bin Description"),
+        (6, "IF Bar Description|IF Bin Description"),
+        (7, "IF Foo Description|IF Bar Description|IF Bin Description"),
+    ]
+
+    assert MyModel._meta.get_field("if_field_with_empty_state").choices == [
+        x for x in expected_choices if x[0]
+    ]
+    assert MyModel._meta.get_field("if_field_with_empty_state_nullable").choices == expected_choices
 
 
 def test_default_value_text():
@@ -229,3 +273,51 @@ def test_set_wrong_value_integer_flag(v, db):
             m.save()
 
         assert str(exc.value) == f"Field 'if_field' expected a number but got '{v}'."
+
+
+def test_text_field_get_display(db):
+    m = MyModel()
+    assert isinstance(m.c_field, MyModel.TextEnum)
+    assert m.c_field == MyModel.TextEnum.C_FOO
+    assert m.get_c_field_display() == "T Foo Description"
+
+    assert m.c_field_nullable is None
+    assert m.get_c_field_nullable_display() is None
+
+    assert m.c_field_with_empty_state_nullable is None
+    assert (
+        m.get_c_field_with_empty_state_nullable_display()
+        == MyModel.TextEnumWithEmptyStateLabel.__empty__
+    )
+
+
+def test_int_field_get_display(db):
+    m = MyModel()
+    assert isinstance(m.i_field, MyModel.IntegerEnum)
+    assert m.i_field == MyModel.IntegerEnum.I_FOO
+    assert m.get_i_field_display() == "I Foo Description"
+
+    assert m.i_field_nullable is None
+    assert m.get_i_field_nullable_display() is None
+
+    assert m.i_field_with_empty_state_nullable is None
+    assert (
+        m.get_i_field_with_empty_state_nullable_display()
+        == MyModel.IntegerEnumWithEmptyStateLabel.__empty__
+    )
+
+
+def test_int_flag_field_get_display(db):
+    m = MyModel()
+    assert isinstance(m.if_field, MyModel.IntegerFlagEnum)
+    assert m.if_field == MyModel.IntegerFlagEnum.IF_FOO
+    assert m.get_if_field_display() == "IF Foo Description"
+
+    assert m.if_field_nullable is None
+    assert m.get_if_field_nullable_display() is None
+
+    assert m.if_field_with_empty_state_nullable is None
+    assert (
+        m.get_if_field_with_empty_state_nullable_display()
+        == MyModel.IntegerFlagEnumWithEmptyStateLabel.__empty__
+    )
