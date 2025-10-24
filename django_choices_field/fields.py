@@ -9,6 +9,7 @@ from typing import (
     Sequence,
     Tuple,
     Type,
+    Union,
     cast,
 )
 
@@ -22,8 +23,12 @@ def _get_flag_description(descs: Sequence[str]) -> str:
     return "|".join(str(desc) for desc in descs)
 
 
-def _get_integer_enum_members(choices: List[Tuple[int, str]]) -> Dict[str, int]:
-    return {desc.replace(" ", "_").upper(): value for value, desc in choices}
+def _get_integer_enum_members(choices: List[Tuple[Union[int, None], str]]) -> Dict[str, int]:
+    # choices can contain the `None` key which can't be mapped to an enum. See
+    # Django Model Field docs about Enumeration Types for more info about
+    # labelling empty states with `__empty__`.
+    filtered_choices = [(k, v) for (k, v) in choices if k is not None]
+    return {desc.replace(" ", "_").upper(): value for value, desc in filtered_choices}
 
 
 try:
@@ -53,15 +58,23 @@ class TextChoicesField(models.CharField):
     ):
         if choices_enum is not None:
             self.choices_enum = choices_enum
-            kwargs["choices"] = [(x.value, x.label) for x in choices_enum]
+            if getattr(self, "null", False) or kwargs.get("null"):
+                kwargs["choices"] = choices_enum.choices
+            else:
+                kwargs["choices"] = [
+                    (k, v) for (k, v) in choices_enum.choices if cast(object, k) is not None
+                ]
         elif "choices" in kwargs:
             self.choices_enum = models.TextChoices(
                 "ChoicesEnum",
-                [(k, (k, v)) for k, v in kwargs["choices"]],
+                [(k, (k, v)) for k, v in kwargs["choices"] if k is not None],
             )
         else:
             raise TypeError("either of choices_enum or choices must be provided")
-        kwargs.setdefault("max_length", max(len(c[0]) for c in kwargs["choices"]))
+        kwargs.setdefault(
+            "max_length",
+            max(len(c[0]) for c in kwargs["choices"] if c[0] is not None),
+        )
         super().__init__(verbose_name=verbose_name, name=name, **kwargs)
 
     def to_python(self, value):
@@ -100,7 +113,12 @@ class IntegerChoicesField(models.IntegerField):
     ):
         if choices_enum is not None:
             self.choices_enum = choices_enum
-            kwargs["choices"] = [(x.value, x.label) for x in choices_enum]
+            if getattr(self, "null", False) or kwargs.get("null"):
+                kwargs["choices"] = choices_enum.choices
+            else:
+                kwargs["choices"] = [
+                    (k, v) for (k, v) in choices_enum.choices if cast(object, k) is not None
+                ]
         elif "choices" in kwargs:
             enum_members = _get_integer_enum_members(kwargs["choices"])
             self.choices_enum = models.IntegerChoices("ChoicesEnum", enum_members)
@@ -153,8 +171,13 @@ class IntegerChoicesFlagField(models.IntegerField):
         if choices_enum is not None:
             self.choices_enum = choices_enum
 
+            if getattr(self, "null", False) or kwargs.get("null"):
+                kwargs["choices"] = choices_enum.choices
+            else:
+                kwargs["choices"] = [
+                    (k, v) for (k, v) in choices_enum.choices if cast(object, k) is not None
+                ]
             default_choices = [(x.value, x.label) for x in choices_enum]
-            kwargs["choices"] = default_choices[:]
             for i in range(1, len(default_choices)):
                 for combination in itertools.combinations(default_choices, i + 1):
                     value = functools.reduce(lambda a, b: a | b[0], combination, 0)
