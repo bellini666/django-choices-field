@@ -195,12 +195,14 @@ class IntegerChoicesFlagField(models.IntegerField):
         if choices_enum is not None:
             self.choices_enum = choices_enum
 
+            choices: list[tuple[int | None, str]]
             if getattr(self, "null", False) or kwargs.get("null"):
-                kwargs["choices"] = choices_enum.choices
+                choices = list(choices_enum.choices)
             else:
-                kwargs["choices"] = [
+                choices = [
                     (k, v) for (k, v) in choices_enum.choices if cast("object", k) is not None
                 ]
+
             default_choices = [(x.value, x.label) for x in choices_enum]
             for i in range(1, len(default_choices)):
                 for combination in itertools.combinations(default_choices, i + 1):
@@ -213,7 +215,9 @@ class IntegerChoicesFlagField(models.IntegerField):
                     else:
                         desc = _get_flag_description(descs)
 
-                    kwargs["choices"].append((value, desc))
+                    choices.append((value, desc))
+
+            kwargs["choices"] = choices
         elif "choices" in kwargs:
             default_choices_length = len(kwargs["choices"]).bit_length()
             default_choices = [kwargs["choices"][i] for i in range(default_choices_length)]
