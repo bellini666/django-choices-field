@@ -1,9 +1,11 @@
 import enum
-import sys
 from typing import TYPE_CHECKING
 
 from django.db import models
 from typing_extensions import Self
+
+if TYPE_CHECKING:
+    import sys
 
 
 class IntegerChoicesFlag(models.IntegerChoices, enum.Flag):

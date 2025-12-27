@@ -4,6 +4,13 @@ import pytest
 from django.core.exceptions import ImproperlyConfigured, ValidationError
 from django.db import models
 
+from django_choices_field.fields import (
+    IntegerChoicesField,
+    IntegerChoicesFlagField,
+    TextChoicesField,
+)
+from django_choices_field.types import IntegerChoicesFlag
+
 from .models import MyModel
 
 
@@ -325,8 +332,6 @@ def test_int_flag_field_get_display(db):
 
 
 def test_textchoices_field_blank_without_null_raises_error():
-    from django_choices_field import TextChoicesField
-
     class DummyEnum(models.TextChoices):
         FOO = "foo", "Foo"
         BAR = "bar", "Bar"
@@ -342,8 +347,6 @@ def test_textchoices_field_blank_without_null_raises_error():
 
 
 def test_integerchoices_field_blank_without_null_raises_error():
-    from django_choices_field import IntegerChoicesField
-
     class DummyEnum(models.IntegerChoices):
         FOO = 1, "Foo"
         BAR = 2, "Bar"
@@ -359,9 +362,6 @@ def test_integerchoices_field_blank_without_null_raises_error():
 
 
 def test_integerchoicesflag_field_blank_without_null_raises_error():
-    from django_choices_field.fields import IntegerChoicesFlagField
-    from django_choices_field.types import IntegerChoicesFlag
-
     class DummyEnum(IntegerChoicesFlag):
         FOO = 1, "Foo"
         BAR = 2, "Bar"
@@ -377,8 +377,6 @@ def test_integerchoicesflag_field_blank_without_null_raises_error():
 
 
 def test_textchoices_field_with_choices_parameter():
-    from django_choices_field import TextChoicesField
-
     field = TextChoicesField(
         choices=[("foo", "Foo"), ("bar", "Bar")],
         default="foo",
@@ -390,8 +388,6 @@ def test_textchoices_field_with_choices_parameter():
 
 
 def test_textchoices_field_with_choices_blank_without_null():
-    from django_choices_field import TextChoicesField
-
     with pytest.raises(ImproperlyConfigured) as exc:
         TextChoicesField(
             choices=[("foo", "Foo"), ("bar", "Bar")],
@@ -403,8 +399,6 @@ def test_textchoices_field_with_choices_blank_without_null():
 
 
 def test_integerchoices_field_with_choices_parameter():
-    from django_choices_field import IntegerChoicesField
-
     field = IntegerChoicesField(
         choices=[(1, "One"), (2, "Two")],
         default=1,
@@ -416,8 +410,6 @@ def test_integerchoices_field_with_choices_parameter():
 
 
 def test_textchoices_field_without_choices_or_enum_raises_error():
-    from django_choices_field import TextChoicesField
-
     with pytest.raises(TypeError) as exc:
         TextChoicesField()
 
@@ -425,8 +417,6 @@ def test_textchoices_field_without_choices_or_enum_raises_error():
 
 
 def test_integerchoices_field_without_choices_or_enum_raises_error():
-    from django_choices_field import IntegerChoicesField
-
     with pytest.raises(TypeError) as exc:
         IntegerChoicesField()
 
@@ -434,8 +424,6 @@ def test_integerchoices_field_without_choices_or_enum_raises_error():
 
 
 def test_integerchoicesflag_field_without_choices_or_enum_raises_error():
-    from django_choices_field.fields import IntegerChoicesFlagField
-
     with pytest.raises(TypeError) as exc:
         IntegerChoicesFlagField()
 

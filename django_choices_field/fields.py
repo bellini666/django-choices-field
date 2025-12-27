@@ -1,15 +1,8 @@
 import functools
 import itertools
+from collections.abc import Callable, Sequence
 from typing import (
-    Callable,
     ClassVar,
-    Dict,
-    List,
-    Optional,
-    Sequence,
-    Tuple,
-    Type,
-    Union,
     cast,
 )
 
@@ -23,7 +16,7 @@ def _get_flag_description(descs: Sequence[str]) -> str:
     return "|".join(str(desc) for desc in descs)
 
 
-def _get_integer_enum_members(choices: List[Tuple[Union[int, None], str]]) -> Dict[str, int]:
+def _get_integer_enum_members(choices: list[tuple[int | None, str]]) -> dict[str, int]:
     # choices can contain the `None` key which can't be mapped to an enum. See
     # Django Model Field docs about Enumeration Types for more info about
     # labelling empty states with `__empty__`.
@@ -38,22 +31,28 @@ except ImportError:  # pragma: nocover
     _get_flag_description_lazy = None
 else:
     _get_flag_description_lazy = cast(
-        Callable[[Sequence[str]], str],
+        "Callable[[Sequence[str]], str]",
         lazy(_get_flag_description, str),
     )
 
 
 class TextChoicesField(models.CharField):
+    """A CharField that validates and stores values from a TextChoices enum.
+
+    This field ensures that only valid values from the specified TextChoices enum
+    are accepted, providing type safety and validation at the database level.
+    """
+
     description: ClassVar[str] = "TextChoices"
-    default_error_messages: ClassVar[Dict[str, str]] = {
+    default_error_messages: ClassVar[dict[str, str]] = {
         "invalid": "“%(value)s” must be a subclass of %(enum)s.",
     }
 
     def __init__(
         self,
-        choices_enum: Optional[Type[models.TextChoices]] = None,
-        verbose_name: Optional[str] = None,
-        name: Optional[str] = None,
+        choices_enum: type[models.TextChoices] | None = None,
+        verbose_name: str | None = None,
+        name: str | None = None,
         **kwargs,
     ):
         if choices_enum is not None:
@@ -62,7 +61,7 @@ class TextChoicesField(models.CharField):
                 kwargs["choices"] = choices_enum.choices
             else:
                 kwargs["choices"] = [
-                    (k, v) for (k, v) in choices_enum.choices if cast(object, k) is not None
+                    (k, v) for (k, v) in choices_enum.choices if cast("object", k) is not None
                 ]
         elif "choices" in kwargs:
             self.choices_enum = models.TextChoices(
@@ -106,16 +105,22 @@ class TextChoicesField(models.CharField):
 
 
 class IntegerChoicesField(models.IntegerField):
+    """An IntegerField that validates and stores values from an IntegerChoices enum.
+
+    This field ensures that only valid integer values from the specified IntegerChoices enum
+    are accepted, providing type safety and validation at the database level.
+    """
+
     description: ClassVar[str] = "IntegerChoices"
-    default_error_messages: ClassVar[Dict[str, str]] = {
+    default_error_messages: ClassVar[dict[str, str]] = {
         "invalid": "“%(value)s” must be a subclass of %(enum)s.",
     }
 
     def __init__(
         self,
-        choices_enum: Optional[Type[models.IntegerChoices]] = None,
-        verbose_name: Optional[str] = None,
-        name: Optional[str] = None,
+        choices_enum: type[models.IntegerChoices] | None = None,
+        verbose_name: str | None = None,
+        name: str | None = None,
         **kwargs,
     ):
         if choices_enum is not None:
@@ -124,7 +129,7 @@ class IntegerChoicesField(models.IntegerField):
                 kwargs["choices"] = choices_enum.choices
             else:
                 kwargs["choices"] = [
-                    (k, v) for (k, v) in choices_enum.choices if cast(object, k) is not None
+                    (k, v) for (k, v) in choices_enum.choices if cast("object", k) is not None
                 ]
         elif "choices" in kwargs:
             enum_members = _get_integer_enum_members(kwargs["choices"])
@@ -169,16 +174,22 @@ class IntegerChoicesField(models.IntegerField):
 
 
 class IntegerChoicesFlagField(models.IntegerField):
+    """An IntegerField that validates and stores bitwise flag values from an IntegerChoicesFlag enum.
+
+    This field supports storing combinations of flags from the specified IntegerChoicesFlag enum,
+    allowing multiple enum values to be combined using bitwise operations.
+    """
+
     description: ClassVar[str] = "IntegerChoicesFlag"
-    default_error_messages: ClassVar[Dict[str, str]] = {
+    default_error_messages: ClassVar[dict[str, str]] = {
         "invalid": "“%(value)s” must be a subclass of %(enum)s.",
     }
 
     def __init__(
         self,
-        choices_enum: Optional[Type[IntegerChoicesFlag]] = None,
-        verbose_name: Optional[str] = None,
-        name: Optional[str] = None,
+        choices_enum: type[IntegerChoicesFlag] | None = None,
+        verbose_name: str | None = None,
+        name: str | None = None,
         **kwargs,
     ):
         if choices_enum is not None:
@@ -188,7 +199,7 @@ class IntegerChoicesFlagField(models.IntegerField):
                 kwargs["choices"] = choices_enum.choices
             else:
                 kwargs["choices"] = [
-                    (k, v) for (k, v) in choices_enum.choices if cast(object, k) is not None
+                    (k, v) for (k, v) in choices_enum.choices if cast("object", k) is not None
                 ]
             default_choices = [(x.value, x.label) for x in choices_enum]
             for i in range(1, len(default_choices)):

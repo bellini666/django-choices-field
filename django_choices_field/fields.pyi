@@ -1,26 +1,23 @@
+from collections.abc import Callable, Iterable
 from typing import (
     Any,
-    Callable,
-    Dict,
     Generic,
-    Iterable,
     Literal,
-    Optional,
+    TypeAlias,
     TypeVar,
     overload,
 )
 
 from django.db.models import Field, IntegerChoices, TextChoices
-from typing_extensions import TypeAlias
 
 from django_choices_field.types import IntegerChoicesFlag
 
 _ValidatorCallable: TypeAlias = Callable[..., None]
-_ErrorMessagesToOverride: TypeAlias = Dict[str, Any]
+_ErrorMessagesToOverride: TypeAlias = dict[str, Any]
 
-_C = TypeVar("_C", bound=Optional[TextChoices])
+_C = TypeVar("_C", bound=TextChoices | None)
 
-class TextChoicesField(Generic[_C], Field[_C, _C]):
+class TextChoicesField(Field[_C, _C], Generic[_C]):
     choices_enum: type[_C]
     @overload
     def __new__(
@@ -83,9 +80,9 @@ class TextChoicesField(Generic[_C], Field[_C, _C]):
         allow_folders: bool = ...,
     ) -> TextChoicesField[_C | None]: ...
 
-_I = TypeVar("_I", bound=Optional[IntegerChoices])
+_I = TypeVar("_I", bound=IntegerChoices | None)
 
-class IntegerChoicesField(Generic[_I], Field[_I, _I]):
+class IntegerChoicesField(Field[_I, _I], Generic[_I]):
     choices_enum: type[_I]
     @overload
     def __new__(
@@ -148,9 +145,9 @@ class IntegerChoicesField(Generic[_I], Field[_I, _I]):
         allow_folders: bool = ...,
     ) -> IntegerChoicesField[_I | None]: ...
 
-_IF = TypeVar("_IF", bound=Optional[IntegerChoicesFlag])
+_IF = TypeVar("_IF", bound=IntegerChoicesFlag | None)
 
-class IntegerChoicesFlagField(Generic[_IF], Field[_IF, _IF]):
+class IntegerChoicesFlagField(Field[_IF, _IF], Generic[_IF]):
     choices_enum: type[_IF]
     @overload
     def __new__(

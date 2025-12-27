@@ -17,116 +17,107 @@ classifiers = [
     "Operating System :: OS Independent",
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.8",
-    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
     "Framework :: Django",
-    "Framework :: Django :: 3.2",
-    "Framework :: Django :: 4.0",
-    "Framework :: Django :: 4.1",
     "Framework :: Django :: 4.2",
     "Framework :: Django :: 5.0",
     "Framework :: Django :: 5.1",
     "Framework :: Django :: 5.2",
+    "Framework :: Django :: 6.0",
 ]
 packages = [{ include = "django_choices_field" }]
 
 [tool.poetry.dependencies]
-python = ">=3.8,<4.0"
-django = ">=3.2"
+python = ">=3.10,<4.0"
+django = ">=4.2"
 typing_extensions = ">=4.0.0"
 
 [tool.poetry.group.dev.dependencies]
-black = "^24.3.0"
 codecov = "^2.1.11"
 django = "^4.2"
 django-types = "^0.19.1"
 pytest = "^8.0.2"
 pytest-cov = "^4.0.0"
 pytest-django = "^4.2.0"
-ruff = "^0.0.274"
-
-[tool.black]
-line-length = 100
-target-version = ['py38']
-preview = true
-exclude = '''
-/(
-    \.eggs
-  | \.git
-  | \.hg
-  | \.mypy_cache
-  | \.tox
-  | \.venv
-  | __pycached__
-  | _build
-  | buck-out
-  | build
-  | dist
-)/
-'''
+ruff = "^0.14.0"
 
 [tool.ruff]
+target-version = "py310"
 line-length = 100
-select = [
-    "E",
-    "F",
-    "W",
-    "I",
-    "N",
+
+[tool.ruff.lint]
+extend-select = [
+    "A",
+    "ASYNC",
+    "B",
+    "BLE",
+    "C4",
+    "COM",
     "D",
-    "UP",
-    "YTT",
     "D2",
     "D3",
     "D4",
-    "BLE",
-    "B",
-    "A",
-    "COM",
-    "C4",
     "DTZ",
-    "T10",
+    "E",
+    "ERA",
     "EXE",
-    "ISC",
-    "ICN001",
+    "F",
+    "FURB",
     "G",
+    "I",
+    "ICN001",
     "INP",
+    "ISC",
+    "N",
+    "PERF",
+    "PGH",
     "PIE",
-    "T20",
-    "PYI",
+    "PL",
     "PT",
+    "PTH",
+    "PYI",
     "Q",
     "RET",
-    "SIM",
-    "TID",
-    "TCH",
-    "PTH",
-    "ERA",
-    "PGH",
-    "PL",
     "RSE",
     "RUF",
-    "TRY",
+    "SIM",
     "SLF",
+    "SLOT",
+    "T10",
+    "T20",
+    "TCH",
+    "TID",
+    "TRY",
+    "UP",
+    "W",
+    "YTT",
 ]
-ignore = [
-    "D1",
-    "D203",
-    "D213",
-    "TCH001",
-    "TCH002",
-    "TCH003",
-    "PGH003",
-    "PLR09",
-    "PLR2004",
-    "SLF001",
+extend-ignore = [
+    "D100",
+    "D102",
+    "D104",
+    "D105",
+    "D107",
     "TRY003",
+    # ruff formatter recommends to disable those
+    "COM812",
+    "COM819",
+    "D206",
+    "E111",
+    "E114",
+    "E117",
+    "E501",
+    "ISC001",
+    "Q000",
+    "Q001",
+    "Q002",
+    "Q003",
+    "W191",
 ]
-target-version = "py37"
 exclude = [
     ".eggs",
     ".git",
@@ -141,13 +132,20 @@ exclude = [
     "dist",
 ]
 
-[tool.ruff.isort]
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["A003", "PLW0603", "PLR2004", "D", "PGH003", "SLF001"]
+"examples/*" = ["A003"]
+"**/migrations/*" = ["RUF012"]
 
-[tool.ruff.pydocstyle]
+[tool.ruff.lint.pydocstyle]
 convention = "google"
 
+[tool.ruff.lint.isort]
+
+[tool.ruff.format]
+
 [tool.pyright]
-pythonVersion = "3.8"
+pythonVersion = "3.10"
 useLibraryCodeForTypes = true
 venvPath = "."
 venv = ".venv"

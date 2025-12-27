@@ -25,45 +25,36 @@ jobs:
   tests:
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         django-version:
-          - 3.2.*
-          - 4.0.*
-          - 4.1.*
           - 4.2.*
           - 5.0.*
           - 5.1.*
           - 5.2.*
         python-version:
-          - '3.8'
-          - '3.9'
           - '3.10'
           - '3.11'
           - '3.12'
           - '3.13'
+          - '3.14'
         exclude:
-          # Django 4.2- doesn't support python 3.13
-          - django-version: 3.2.*
-            python-version: '3.13'
-          - django-version: 4.0.*
-            python-version: '3.13'
-          - django-version: 4.1.*
-            python-version: '3.13'
+          # Django 4.2 only supports python 3.8-3.12
           - django-version: 4.2.*
             python-version: '3.13'
-          # Django 5.0+ only supports python 3.10+
+          - django-version: 4.2.*
+            python-version: '3.14'
+          # Django 5.0 only supports python 3.10-3.12
           - django-version: 5.0.*
-            python-version: '3.8'
+            python-version: '3.13'
           - django-version: 5.0.*
-            python-version: '3.9'
+            python-version: '3.14'
+          # Django 5.1 only supports python 3.10-3.13
           - django-version: 5.1.*
-            python-version: '3.8'
-          - django-version: 5.1.*
-            python-version: '3.9'
+            python-version: '3.14'
+          # Django 5.2 only supports python 3.10-3.13 (assuming)
           - django-version: 5.2.*
-            python-version: '3.8'
-          - django-version: 5.2.*
-            python-version: '3.9'
+            python-version: '3.14'
     steps:
       - name: Checkout
         uses: actions/checkout@v4

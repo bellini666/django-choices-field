@@ -1,49 +1,32 @@
 ---
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.4.0
+    rev: v6.0.0
     hooks:
       - id: trailing-whitespace
       - id: end-of-file-fixer
-        exclude: |
-          (?x)(
-              tests/data/schema.gql
-          )
+        exclude: snapshots
       - id: check-added-large-files
         args:
           - --maxkb=1024
       - id: check-docstring-first
       - id: check-merge-conflict
       - id: check-yaml
+        exclude: mkdocs.yml
       - id: check-toml
       - id: check-json
       - id: check-xml
       - id: check-symlinks
-  - repo: https://github.com/codespell-project/codespell
-    rev: v2.2.5
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.14.10
     hooks:
-      - id: codespell
-        types_or:
-          - cython
-          - pyi
-          - python
-          - markdown
-  - repo: https://github.com/asottile/pyupgrade
-    rev: v3.7.0
-    hooks:
-      - id: pyupgrade
-        args:
-          - --py37-plus
-  - repo: https://github.com/charliermarsh/ruff-pre-commit
-    rev: v0.0.274
-    hooks:
+      - id: ruff-format
       - id: ruff
         args:
           - --fix
-  - repo: https://github.com/psf/black
-    rev: 24.2.0
+  - repo: https://github.com/adamchainz/django-upgrade
+    rev: 1.29.1
     hooks:
-      - id: black
+      - id: django-upgrade
         args:
-          - --config
-          - pyproject.toml
+          - --target-version=4.2
