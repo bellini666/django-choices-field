@@ -13,7 +13,7 @@ from typing import (
     cast,
 )
 
-from django.core.exceptions import ValidationError
+from django.core.exceptions import ImproperlyConfigured, ValidationError
 from django.db import models
 
 from .types import IntegerChoicesFlag
@@ -71,11 +71,22 @@ class TextChoicesField(models.CharField):
             )
         else:
             raise TypeError("either of choices_enum or choices must be provided")
+
         kwargs.setdefault(
             "max_length",
             max(len(c[0]) for c in kwargs["choices"] if c[0] is not None),
         )
+
         super().__init__(verbose_name=verbose_name, name=name, **kwargs)
+
+        if self.blank and not self.null:
+            raise ImproperlyConfigured(
+                f"{self.__class__.__name__} with blank=True must also have null=True.",
+            )
+        if self.blank and not self.null:
+            raise ImproperlyConfigured(
+                f"{self.__class__.__name__} with blank=True must also have null=True.",
+            )
 
     def to_python(self, value):
         if value in self.empty_values:
@@ -124,7 +135,13 @@ class IntegerChoicesField(models.IntegerField):
             self.choices_enum = models.IntegerChoices("ChoicesEnum", enum_members)
         else:
             raise TypeError("either of choices_enum or choices must be provided")
+
         super().__init__(verbose_name=verbose_name, name=name, **kwargs)
+
+        if self.blank and not self.null:
+            raise ImproperlyConfigured(
+                f"{self.__class__.__name__} with blank=True must also have null=True.",
+            )
 
     def to_python(self, value):
         if value is None:
@@ -199,6 +216,11 @@ class IntegerChoicesFlagField(models.IntegerField):
             raise TypeError("either of choices_enum or choices must be provided")
 
         super().__init__(verbose_name=verbose_name, name=name, **kwargs)
+
+        if self.blank and not self.null:
+            raise ImproperlyConfigured(
+                f"{self.__class__.__name__} with blank=True must also have null=True.",
+            )
 
     def to_python(self, value):
         if value is None:

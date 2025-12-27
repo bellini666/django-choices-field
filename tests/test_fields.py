@@ -1,7 +1,8 @@
 import sys
 
 import pytest
-from django.core.exceptions import ValidationError
+from django.core.exceptions import ImproperlyConfigured, ValidationError
+from django.db import models
 
 from .models import MyModel
 
@@ -321,3 +322,55 @@ def test_int_flag_field_get_display(db):
         m.get_if_field_with_empty_state_nullable_display()
         == MyModel.IntegerFlagEnumWithEmptyStateLabel.__empty__
     )
+
+
+def test_textchoices_field_blank_without_null_raises_error():
+    from django_choices_field import TextChoicesField
+
+    class DummyEnum(models.TextChoices):
+        FOO = "foo", "Foo"
+        BAR = "bar", "Bar"
+
+    with pytest.raises(ImproperlyConfigured) as exc:
+        TextChoicesField(
+            choices_enum=DummyEnum,
+            blank=True,
+            null=False,
+        )
+
+    assert str(exc.value) == "TextChoicesField with blank=True must also have null=True."
+
+
+def test_integerchoices_field_blank_without_null_raises_error():
+    from django_choices_field import IntegerChoicesField
+
+    class DummyEnum(models.IntegerChoices):
+        FOO = 1, "Foo"
+        BAR = 2, "Bar"
+
+    with pytest.raises(ImproperlyConfigured) as exc:
+        IntegerChoicesField(
+            choices_enum=DummyEnum,
+            blank=True,
+            null=False,
+        )
+
+    assert str(exc.value) == "IntegerChoicesField with blank=True must also have null=True."
+
+
+def test_integerchoicesflag_field_blank_without_null_raises_error():
+    from django_choices_field.fields import IntegerChoicesFlagField
+    from django_choices_field.types import IntegerChoicesFlag
+
+    class DummyEnum(IntegerChoicesFlag):
+        FOO = 1, "Foo"
+        BAR = 2, "Bar"
+
+    with pytest.raises(ImproperlyConfigured) as exc:
+        IntegerChoicesFlagField(
+            choices_enum=DummyEnum,
+            blank=True,
+            null=False,
+        )
+
+    assert str(exc.value) == "IntegerChoicesFlagField with blank=True must also have null=True."
