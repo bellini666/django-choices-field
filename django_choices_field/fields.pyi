@@ -9,8 +9,11 @@ from typing import (
 )
 
 from django.db.models import Field, IntegerChoices, TextChoices
+from django.utils.functional import Promise
 
 from django_choices_field.types import IntegerChoicesFlag
+
+StrOrPromise: TypeAlias = str | Promise
 
 _ValidatorCallable: TypeAlias = Callable[..., None]
 _ErrorMessagesToOverride: TypeAlias = dict[str, Any]
@@ -23,7 +26,7 @@ class TextChoicesField(Field[_C, _C], Generic[_C]):
     def __new__(
         cls,
         choices_enum: type[_C],
-        verbose_name: str | None = ...,
+        verbose_name: StrOrPromise | None = ...,
         name: str | None = ...,
         primary_key: bool = ...,
         max_length: int | None = ...,
@@ -38,7 +41,7 @@ class TextChoicesField(Field[_C, _C], Generic[_C]):
         unique_for_date: str | None = ...,
         unique_for_month: str | None = ...,
         unique_for_year: str | None = ...,
-        help_text: str = ...,
+        help_text: StrOrPromise = ...,
         db_column: str | None = ...,
         db_tablespace: str | None = ...,
         validators: Iterable[_ValidatorCallable] = ...,
@@ -53,7 +56,7 @@ class TextChoicesField(Field[_C, _C], Generic[_C]):
     def __new__(
         cls,
         choices_enum: type[_C],
-        verbose_name: str | None = ...,
+        verbose_name: StrOrPromise | None = ...,
         name: str | None = ...,
         primary_key: bool = ...,
         max_length: int | None = ...,
@@ -68,7 +71,7 @@ class TextChoicesField(Field[_C, _C], Generic[_C]):
         unique_for_date: str | None = ...,
         unique_for_month: str | None = ...,
         unique_for_year: str | None = ...,
-        help_text: str = ...,
+        help_text: StrOrPromise = ...,
         db_column: str | None = ...,
         db_tablespace: str | None = ...,
         validators: Iterable[_ValidatorCallable] = ...,
@@ -88,7 +91,7 @@ class IntegerChoicesField(Field[_I, _I], Generic[_I]):
     def __new__(
         cls,
         choices_enum: type[_I],
-        verbose_name: str | None = ...,
+        verbose_name: StrOrPromise | None = ...,
         name: str | None = ...,
         primary_key: bool = ...,
         max_length: int | None = ...,
@@ -103,7 +106,7 @@ class IntegerChoicesField(Field[_I, _I], Generic[_I]):
         unique_for_date: str | None = ...,
         unique_for_month: str | None = ...,
         unique_for_year: str | None = ...,
-        help_text: str = ...,
+        help_text: StrOrPromise = ...,
         db_column: str | None = ...,
         db_tablespace: str | None = ...,
         validators: Iterable[_ValidatorCallable] = ...,
@@ -118,7 +121,7 @@ class IntegerChoicesField(Field[_I, _I], Generic[_I]):
     def __new__(
         cls,
         choices_enum: type[_I],
-        verbose_name: str | None = ...,
+        verbose_name: StrOrPromise | None = ...,
         name: str | None = ...,
         primary_key: bool = ...,
         max_length: int | None = ...,
@@ -133,7 +136,7 @@ class IntegerChoicesField(Field[_I, _I], Generic[_I]):
         unique_for_date: str | None = ...,
         unique_for_month: str | None = ...,
         unique_for_year: str | None = ...,
-        help_text: str = ...,
+        help_text: StrOrPromise = ...,
         db_column: str | None = ...,
         db_tablespace: str | None = ...,
         validators: Iterable[_ValidatorCallable] = ...,
@@ -153,7 +156,7 @@ class IntegerChoicesFlagField(Field[_IF, _IF], Generic[_IF]):
     def __new__(
         cls,
         choices_enum: type[_IF],
-        verbose_name: str | None = ...,
+        verbose_name: StrOrPromise | None = ...,
         name: str | None = ...,
         primary_key: bool = ...,
         max_length: int | None = ...,
@@ -168,7 +171,7 @@ class IntegerChoicesFlagField(Field[_IF, _IF], Generic[_IF]):
         unique_for_date: str | None = ...,
         unique_for_month: str | None = ...,
         unique_for_year: str | None = ...,
-        help_text: str = ...,
+        help_text: StrOrPromise = ...,
         db_column: str | None = ...,
         db_tablespace: str | None = ...,
         validators: Iterable[_ValidatorCallable] = ...,
@@ -183,7 +186,7 @@ class IntegerChoicesFlagField(Field[_IF, _IF], Generic[_IF]):
     def __new__(
         cls,
         choices_enum: type[_IF],
-        verbose_name: str | None = ...,
+        verbose_name: StrOrPromise | None = ...,
         name: str | None = ...,
         primary_key: bool = ...,
         max_length: int | None = ...,
@@ -198,7 +201,7 @@ class IntegerChoicesFlagField(Field[_IF, _IF], Generic[_IF]):
         unique_for_date: str | None = ...,
         unique_for_month: str | None = ...,
         unique_for_year: str | None = ...,
-        help_text: str = ...,
+        help_text: StrOrPromise = ...,
         db_column: str | None = ...,
         db_tablespace: str | None = ...,
         validators: Iterable[_ValidatorCallable] = ...,

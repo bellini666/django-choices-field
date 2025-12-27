@@ -71,7 +71,7 @@ class MyModel(models.Model):
             "IF Bin Description",  # type: ignore
         )
 
-    objects = models.Manager["MyModel"]()  # type: ignore
+    objects = models.Manager["MyModel"]()
 
     c_field = TextChoicesField(
         choices_enum=TextEnum,

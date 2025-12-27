@@ -84,11 +84,11 @@ class TextChoicesField(models.CharField):
             )
 
     def to_python(self, value):
-        if value in self.empty_values:
+        if value in self.empty_values:  # type: ignore[attr-defined]
             return None
 
         try:
-            return self.choices_enum(value)
+            return self.choices_enum(value)  # type: ignore[operator]
         except ValueError as e:
             raise ValidationError(
                 self.error_messages["invalid"],
