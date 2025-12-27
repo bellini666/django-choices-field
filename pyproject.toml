@@ -39,7 +39,7 @@ python = ">=3.8,<4.0"
 django = ">=3.2"
 typing_extensions = ">=4.0.0"
 
-[tool.poetry.dev-dependencies]
+[tool.poetry.group.dev.dependencies]
 black = "^24.3.0"
 codecov = "^2.1.11"
 django = "^4.2"
