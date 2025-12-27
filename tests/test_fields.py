@@ -374,3 +374,69 @@ def test_integerchoicesflag_field_blank_without_null_raises_error():
         )
 
     assert str(exc.value) == "IntegerChoicesFlagField with blank=True must also have null=True."
+
+
+def test_textchoices_field_with_choices_parameter():
+    from django_choices_field import TextChoicesField
+
+    field = TextChoicesField(
+        choices=[("foo", "Foo"), ("bar", "Bar")],
+        default="foo",
+    )
+
+    # Test that it works
+    assert field.to_python("foo").value == "foo"
+    assert field.to_python("bar").value == "bar"
+
+
+def test_textchoices_field_with_choices_blank_without_null():
+    from django_choices_field import TextChoicesField
+
+    with pytest.raises(ImproperlyConfigured) as exc:
+        TextChoicesField(
+            choices=[("foo", "Foo"), ("bar", "Bar")],
+            blank=True,
+            null=False,
+        )
+
+    assert str(exc.value) == "TextChoicesField with blank=True must also have null=True."
+
+
+def test_integerchoices_field_with_choices_parameter():
+    from django_choices_field import IntegerChoicesField
+
+    field = IntegerChoicesField(
+        choices=[(1, "One"), (2, "Two")],
+        default=1,
+    )
+
+    # Test that it works
+    assert field.to_python(1).value == 1
+    assert field.to_python(2).value == 2
+
+
+def test_textchoices_field_without_choices_or_enum_raises_error():
+    from django_choices_field import TextChoicesField
+
+    with pytest.raises(TypeError) as exc:
+        TextChoicesField()
+
+    assert str(exc.value) == "either of choices_enum or choices must be provided"
+
+
+def test_integerchoices_field_without_choices_or_enum_raises_error():
+    from django_choices_field import IntegerChoicesField
+
+    with pytest.raises(TypeError) as exc:
+        IntegerChoicesField()
+
+    assert str(exc.value) == "either of choices_enum or choices must be provided"
+
+
+def test_integerchoicesflag_field_without_choices_or_enum_raises_error():
+    from django_choices_field.fields import IntegerChoicesFlagField
+
+    with pytest.raises(TypeError) as exc:
+        IntegerChoicesFlagField()
+
+    assert str(exc.value) == "either of choices_enum or choices must be provided"

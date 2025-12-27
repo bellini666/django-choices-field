@@ -83,10 +83,6 @@ class TextChoicesField(models.CharField):
             raise ImproperlyConfigured(
                 f"{self.__class__.__name__} with blank=True must also have null=True.",
             )
-        if self.blank and not self.null:
-            raise ImproperlyConfigured(
-                f"{self.__class__.__name__} with blank=True must also have null=True.",
-            )
 
     def to_python(self, value):
         if value in self.empty_values:
