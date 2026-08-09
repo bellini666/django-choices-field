@@ -38,7 +38,7 @@ typing_extensions = ">=4.0.0"
 
 [tool.poetry.group.dev.dependencies]
 codecov = "^2.1.11"
-django = "^4.2"
+django = ">=4.2,<6.0"
 django-types = "^0.22.0"
 inline-snapshot = "^0.31.1"
 mypy = "^1.16.0"
